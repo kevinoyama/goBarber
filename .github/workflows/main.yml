@@ -46,21 +46,11 @@ jobs:
         source: ".,!node_modules"
         target: "~/app/goBarber"
 
+
     # Executar "Yarn" na Digital Ocean
-    - name: Install depencencies in DO
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{secrets.SSH_KEY}}
-        passphrase: ${{secrets.SSH_PASSPHRASE}}
-        script: |
-          cd ~/app/gobarber
-          yarn   
-          
     # Executar as migrations do typeorm
-    - name: Run migrations in DO
+    # Restart do servidor Node.js
+    - name: Install depencencies in DO / Run migrations / restart server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -70,18 +60,12 @@ jobs:
         passphrase: ${{secrets.SSH_PASSPHRASE}}
         script: |
           cd ~/app/gobarber
+          yarn
           ./node_modules/.bin/typeorm migration:run
-      
-       # Restart do servidor Node.js
-    - name: Restart Node Server
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{secrets.SSH_KEY}}
-        passphrase: ${{secrets.SSH_PASSPHRASE}}
-        script: pm2 restart gobarber_api
+          pm2 restart gobarber_api
+          
+
+
     
     
    
