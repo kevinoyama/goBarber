@@ -59,8 +59,8 @@ jobs:
           cd ~/app/gobarber
           yarn   
           
-      # Executar as migrations do typeorm
-      - name: Run migrations in DO
+    # Executar as migrations do typeorm
+    - name: Run migrations in DO
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
@@ -73,7 +73,7 @@ jobs:
           ./node_modules/.bin/typeorm migration:run
       
        # Restart do servidor Node.js
-      - name: Restart Node Server
+    - name: Restart Node Server
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
